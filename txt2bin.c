@@ -42,6 +42,10 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#define KV_LEN 3
+#define STR_(X) #X
+#define STR(X) STR_(X)
+
 int main(int argc, char *argv[]) {
     int i, j;
     int nscan;
@@ -55,20 +59,20 @@ int main(int argc, char *argv[]) {
     fwrite(&n, sizeof(signed char), 1, stdout);
 
     signed char *tps = (signed char *) calloc(m, sizeof(signed char));
-    char *kvs = (char *) calloc((m - 1) * 3, sizeof(char));
+    char *kvs = (char *) calloc((m - 1) * KV_LEN, sizeof(char));
     signed char *drps = (signed char *) calloc(m - 1, sizeof(signed char));
 
     for (i = 0; i < n; ++i) {
         for (j = 0; j < m - 1; ++j) {
-            nscan = scanf("%hhu %3c %hhu",
+            nscan = scanf("%hhu %" STR(KV_LEN) "c %hhu",
                             tps + j,
-                            kvs + (j * 3),
+                            kvs + (j * KV_LEN),
                             drps + j);
             assert(nscan == 3);
         }
         scanf("%hhu", tps + j);
         fwrite(tps, sizeof(signed char), m, stdout);
-        fwrite(kvs, sizeof(char), (m - 1) * 3, stdout);
+        fwrite(kvs, sizeof(char), (m - 1) * KV_LEN, stdout);
         fwrite(drps, sizeof(signed char), m - 1, stdout);
     }
 
